@@ -3,12 +3,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class ConsistentHashing {
-    private final int numReplicas; // Number of virtual nodes per server
+    private final int numVirtualNodes; // Number of virtual nodes per server
     private final TreeMap<Long, String> ring; // Hash ring storing virtual nodes
     private final Set<String> servers; // Set of physical servers
 
-    public ConsistentHashing(List<String> servers, int numReplicas) {
-        this.numReplicas = numReplicas;
+    public ConsistentHashing(List<String> servers, int numVirtualNodes) {
+        this.numVirtualNodes = numVirtualNodes;
         this.ring = new TreeMap<>();
         this.servers = new HashSet<>();
 
@@ -33,19 +33,21 @@ public class ConsistentHashing {
     }
 
     public void addServer(String server) {
-        servers.add(server);
-        for (int i = 0; i < numReplicas; i++) {
+        // Idempotency check
+        if(!servers.add(server)) return ;
+
+        for (int i = 0; i < numVirtualNodes; i++) {
             long hash = hash(server + "-" + i); // Unique hash for each virtual node
             ring.put(hash, server);
         }
     }
 
     public void removeServer(String server) {
-        if (servers.remove(server)) {
-            for (int i = 0; i < numReplicas; i++) {
-                long hash = hash(server + "-" + i);
-                ring.remove(hash);
-            }
+        if (!servers.remove(server))return ;
+
+        for (int i = 0; i < numVirtualNodes; i++) {
+            long hash = hash(server + "-" + i);
+            ring.remove(hash);
         }
     }
 
