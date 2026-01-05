@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/consistent-hasing/consistent-hasing.iml" filepath="$PROJECT_DIR$/consistent-hasing/consistent-hasing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/load-balancing/load-balancing.iml" filepath="$PROJECT_DIR$/load-balancing/load-balancing.iml" />
       <module fileurl="file://$PROJECT_DIR$/system-design.iml" filepath="$PROJECT_DIR$/system-design.iml" />
     </modules>
   </component>
