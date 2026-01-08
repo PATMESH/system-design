@@ -37,4 +37,37 @@ public class SlidingWindowCounter {
         }
         return false;  // We've exceeded the limit, deny the request
     }
+
+    public static void main(String[] args) throws InterruptedException {
+        // Allow 5 requests per 10 seconds
+        SlidingWindowCounter limiter = new SlidingWindowCounter(10, 5);
+
+        System.out.println("Sending 5 requests quickly:");
+        for (int i = 1; i <= 5; i++) {
+            System.out.println("Request " + i + ": " +
+                    (limiter.allowRequest() ? "Allowed" : "Rate limited"));
+        }
+
+        System.out.println("\nSending one extra request (should be limited):");
+        System.out.println(limiter.allowRequest() ? "Allowed" : "Rate limited");
+
+        System.out.println("\nSleeping for 6 seconds...");
+        Thread.sleep(6000);
+
+        System.out.println("\nSending requests after partial window shift:");
+        for (int i = 1; i <= 3; i++) {
+            System.out.println("Request " + i + ": " +
+                    (limiter.allowRequest() ? "Allowed" : "Rate limited"));
+        }
+
+        System.out.println("\nSleeping until window fully rolls over...");
+        Thread.sleep(5000);
+
+        System.out.println("\nSending requests after full window:");
+        for (int i = 1; i <= 5; i++) {
+            System.out.println("Request " + i + ": " +
+                    (limiter.allowRequest() ? "Allowed" : "Rate limited"));
+        }
+    }
+
 }
