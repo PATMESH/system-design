@@ -28,6 +28,7 @@ public class SlidingWindowCounter {
         }
 
         // Calculate the weighted count of requests
+        // this will recover capacity gradually
         double weightedCount = previousWindowCount * ((windowSizeInSeconds - timePassedInWindow) / (double) windowSizeInSeconds)
                 + currentWindowCount;
 
@@ -40,7 +41,7 @@ public class SlidingWindowCounter {
 
     public static void main(String[] args) throws InterruptedException {
         // Allow 5 requests per 10 seconds
-        SlidingWindowCounter limiter = new SlidingWindowCounter(10, 5);
+        SlidingWindowCounter limiter = new SlidingWindowCounter(5, 5);
 
         System.out.println("Sending 5 requests quickly:");
         for (int i = 1; i <= 5; i++) {
